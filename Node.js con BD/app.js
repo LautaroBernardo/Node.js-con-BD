@@ -1,15 +1,16 @@
 var createError = require('http-errors');
-const express = require('express');
+var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 require('dotenv').config();
+var pool = require('./models/bd');
 
 var indexRouter = require('./routes/index');
-//var usersRouter = require('./routes/users');
+var usersRouter = require('./routes/users');
 
-const app = express();
+var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,7 +23,42 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
+app.use('/users', usersRouter);
+
+
+//consultas
+//select
+pool.query('select * from empleados').then(function (resultados) {
+  console.log(resultados)
+});
+
+
+//insertar
+var obj = {
+  nombre: 'maximo',
+  apellido: 'urrutia',
+  trabajo: 'programador senior',
+  edad: '20',
+  salario: '180000',
+  mail: 'maximourrutia@gmail.com'
+}
+
+pool.query('insert into empleados set ?', [obj]).then(function (resultados) {
+  console.log(resultados)
+});
+
+
+//modificar por id
+var id= 22;
+var obj= {
+  nombre: 'arturo',
+  apellido: 'vidal',
+  edad: 60
+}
+
+pool.query('update empleados set ? where id_emp=?', [obj, id]).then(function (resultados) {
+  console.log(resultados);
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

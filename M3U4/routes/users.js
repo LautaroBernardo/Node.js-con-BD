@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.send('hola soy el formulario de destacados')
+  res.send('respond with a resource');
 });
 
 module.exports = router;
